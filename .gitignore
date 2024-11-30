@@ -362,4 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 
-/ORBIS_Debug
+rtdump-il2cpp-ps4/ORBIS_Debug
