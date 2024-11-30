@@ -1,0 +1,62 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="il2cpp">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;pssli</Extensions>
+    </Filter>
+    <Filter Include="il2cpp\dumper">
+      <UniqueIdentifier>{14d4810e-a690-4c7c-8c92-fea576d9aa49}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="il2cpp\api">
+      <UniqueIdentifier>{70aad73a-f8fc-42d5-bf91-6334f935b0f9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="misc">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;cc;s;asm</Extensions>
+    </Filter>
+    <Filter Include="external">
+      <UniqueIdentifier>{ace23bac-9b81-4f67-9d7b-b453d3629566}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="prx.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="il2cpp_dump.cpp">
+      <Filter>il2cpp\dumper</Filter>
+    </ClCompile>
+    <ClCompile Include="il2cpp_api.cpp">
+      <Filter>il2cpp\api</Filter>
+    </ClCompile>
+    <ClCompile Include="sig.cpp">
+      <Filter>misc</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="il2cpp_class.h">
+      <Filter>il2cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="il2cpp_tabledefs.h">
+      <Filter>il2cpp</Filter>
+    </ClInclude>
+    <ClInclude Include="il2cpp_dump.h">
+      <Filter>il2cpp\dumper</Filter>
+    </ClInclude>
+    <ClInclude Include="il2cpp_api.h">
+      <Filter>il2cpp\api</Filter>
+    </ClInclude>
+    <ClInclude Include="sig.h">
+      <Filter>misc</Filter>
+    </ClInclude>
+    <ClInclude Include="stubmaker.h">
+      <Filter>external</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

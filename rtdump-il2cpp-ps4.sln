@@ -1,0 +1,22 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.11.35303.130
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtdump-il2cpp-ps4", "rtdump-il2cpp-ps4\rtdump-il2cpp-ps4.vcxproj", "{89A56792-FA3F-4809-9022-1C8AA484F009}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|ORBIS = Debug|ORBIS
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{89A56792-FA3F-4809-9022-1C8AA484F009}.Debug|ORBIS.ActiveCfg = Debug|ORBIS
+		{89A56792-FA3F-4809-9022-1C8AA484F009}.Debug|ORBIS.Build.0 = Debug|ORBIS
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {2B015A48-A6CE-4A6F-994C-AE209D130C5E}
+	EndGlobalSection
+EndGlobal

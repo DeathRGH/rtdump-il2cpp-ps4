@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|ORBIS">
+      <Configuration>Debug</Configuration>
+      <Platform>ORBIS</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{89a56792-fa3f-4809-9022-1c8aa484f009}</ProjectGuid>
+    <ProjectName>rtdump-il2cpp-ps4</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <PropertyGroup Condition="'$(DebuggerFlavor)'=='ORBISDebugger'" Label="OverrideDebuggerDefaults">
+    <!--LocalDebuggerCommand>$(TargetPath)</LocalDebuggerCommand-->
+    <!--LocalDebuggerCommandArguments></LocalDebuggerCommandArguments-->
+    <!--LocalDebuggerTarget></LocalDebuggerTarget-->
+    <!--LocalDebuggerWorkingDirectory>$(ProjectDir)</LocalDebuggerWorkingDirectory-->
+    <!--LocalRunCommandLine></LocalRunCommandLine-->
+  </PropertyGroup>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Condition="Exists('$(VCTargetsPath)\BuildCustomizations\OrbisWavePsslc.props')" Project="$(VCTargetsPath)\BuildCustomizations\OrbisWavePsslc.props" />
+    <Import Condition="Exists('$(VCTargetsPath)\BuildCustomizations\SCU.props')" Project="$(VCTargetsPath)\BuildCustomizations\SCU.props" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <Addressing>NonAslr</Addressing>
+      <AdditionalLibraryDirectories>$(ProjectDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>-lKernel_gen_stub_weak</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>"$(PS4_DEP)\self\make_fself.exe"  "$(OutputPath)$(TargetName).prx"  "$(OutputPath)$(TargetName).sprx"
+
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo open 192.168.0.31 2121&gt; temp.txt )
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo cd "/data/"&gt;&gt; temp.txt )
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo send $(OutputPath)$(TargetName).sprx&gt;&gt; temp.txt )
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo quit&gt;&gt; temp.txt )
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo quit&gt;&gt; temp.txt )
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( ftp -A -s:temp.txt )
+if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( del temp.txt )</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="il2cpp_dump.cpp" />
+    <ClCompile Include="il2cpp_api.cpp" />
+    <ClCompile Include="prx.cpp" />
+    <ClCompile Include="sig.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="il2cpp_class.h" />
+    <ClInclude Include="il2cpp_dump.h" />
+    <ClInclude Include="il2cpp_tabledefs.h" />
+    <ClInclude Include="il2cpp_api.h" />
+    <ClInclude Include="sig.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="stubmaker.h" />
+  </ItemGroup>
+  <Import Condition="'$(ConfigurationType)' == 'Makefile' and Exists('$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets')" Project="$(VCTargetsPath)\Platforms\$(Platform)\SCE.Makefile.$(Platform).targets" />
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+    <Import Condition="Exists('$(VCTargetsPath)\BuildCustomizations\OrbisWavePsslc.targets')" Project="$(VCTargetsPath)\BuildCustomizations\OrbisWavePsslc.targets" />
+    <Import Condition="Exists('$(VCTargetsPath)\BuildCustomizations\SCU.targets')" Project="$(VCTargetsPath)\BuildCustomizations\SCU.targets" />
+  </ImportGroup>
+</Project>
