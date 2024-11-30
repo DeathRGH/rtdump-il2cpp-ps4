@@ -5,6 +5,11 @@ Working on any il2cpp version, also the games that give you errors with the clas
 
 Ported from: [Zygisk-Il2CppDumper](https://github.com/Perfare/Zygisk-Il2CppDumper)
 
+# Why?
+The compiled intermediate language instructions have a bunch of metadata that is required for the games to function.<br>
+This data can be dumped and used to generate the equivalent of having debug symbols for the game.<br>
+I plan on expanding this project in the future so you can generate the scripts for ida and ghidra on the console itself.
+
 # Requirements
 - [make_fself_rust](https://github.com/TheRouletteBoi/make_fself_rust)
 - Official PlayStation4 SDK
@@ -23,6 +28,10 @@ G:
 # Building
 Build the solution with visual studio.<br>
 I left a post build event for automatic file transfers via FTP. Simply change the PC name or remove the checks if you want to use it for yourself.
+
+# Usage
+Once you have the prx built and fake signed to a sprx, you can use any sprx loader to inject into a Unity game.
+The current status is printed to klog and a dump file will be generated in `/data/il2cpp`.
 
 # Adding Unsupported Versions
 If the provided signatures do not work for the game you are working on, follow the steps below to add your game:
