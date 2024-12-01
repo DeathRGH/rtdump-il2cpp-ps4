@@ -54,6 +54,7 @@ il2cpp_method_get_return_type_t il2cpp_method_get_return_type;
 il2cpp_string_new_t il2cpp_string_new;
 
 // type
+il2cpp_type_get_name_t il2cpp_type_get_name;
 il2cpp_type_is_byref_t il2cpp_type_is_byref;
 
 // property
@@ -206,6 +207,7 @@ bool il2cpp_api::init() {
 
 	il2cpp_string_new = (il2cpp_string_new_t)find_function_by_name("il2cpp_string_new");
 
+    il2cpp_type_get_name = (il2cpp_type_get_name_t)find_function_by_name("il2cpp_type_get_name");
 	il2cpp_type_is_byref = (il2cpp_type_is_byref_t)find_function_by_name("il2cpp_type_is_byref");
 
 	il2cpp_property_get_get_method = (il2cpp_property_get_get_method_t)find_function_by_name("il2cpp_property_get_get_method");

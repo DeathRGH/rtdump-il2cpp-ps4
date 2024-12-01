@@ -126,6 +126,9 @@ extern il2cpp_string_new_t il2cpp_string_new;
 
 
 // type
+typedef char *(*il2cpp_type_get_name_t)(const Il2CppType *type);
+extern il2cpp_type_get_name_t il2cpp_type_get_name;
+
 typedef bool(*il2cpp_type_is_byref_t)(const Il2CppType *type);
 extern il2cpp_type_is_byref_t il2cpp_type_is_byref;
 
