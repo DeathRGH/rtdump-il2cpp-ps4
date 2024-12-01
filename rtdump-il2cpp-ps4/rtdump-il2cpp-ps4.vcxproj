@@ -59,6 +59,7 @@ if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( del temp.txt )</Command>
   <ItemGroup>
     <ClCompile Include="il2cpp_dump.cpp" />
     <ClCompile Include="il2cpp_api.cpp" />
+    <ClCompile Include="il2cpp_struct_gen.cpp" />
     <ClCompile Include="prx.cpp" />
     <ClCompile Include="sig.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -66,8 +67,10 @@ if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( del temp.txt )</Command>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="header_constants.h" />
     <ClInclude Include="il2cpp_class.h" />
     <ClInclude Include="il2cpp_dump.h" />
+    <ClInclude Include="il2cpp_struct_gen.h" />
     <ClInclude Include="il2cpp_tabledefs.h" />
     <ClInclude Include="il2cpp_api.h" />
     <ClInclude Include="sig.h" />

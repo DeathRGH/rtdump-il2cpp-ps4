@@ -19,3 +19,7 @@
 
 #include "il2cpp_api.h"
 #include "il2cpp_dump.h"
+
+// struct gen
+#include "header_constants.h"
+#include "il2cpp_struct_gen.h"

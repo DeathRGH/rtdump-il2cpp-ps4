@@ -18,6 +18,9 @@
     <Filter Include="external">
       <UniqueIdentifier>{ace23bac-9b81-4f67-9d7b-b453d3629566}</UniqueIdentifier>
     </Filter>
+    <Filter Include="il2cpp\struct_gen">
+      <UniqueIdentifier>{bbdb4310-7334-41fa-9af9-f82602299ac9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="prx.cpp">
@@ -34,6 +37,9 @@
     </ClCompile>
     <ClCompile Include="sig.cpp">
       <Filter>misc</Filter>
+    </ClCompile>
+    <ClCompile Include="il2cpp_struct_gen.cpp">
+      <Filter>il2cpp\struct_gen</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -57,6 +63,12 @@
     </ClInclude>
     <ClInclude Include="stubmaker.h">
       <Filter>external</Filter>
+    </ClInclude>
+    <ClInclude Include="il2cpp_struct_gen.h">
+      <Filter>il2cpp\struct_gen</Filter>
+    </ClInclude>
+    <ClInclude Include="header_constants.h">
+      <Filter>il2cpp\struct_gen</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

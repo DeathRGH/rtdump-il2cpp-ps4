@@ -5,5 +5,5 @@ typedef Il2CppArray *(*Assembly_GetTypes_t)(void *, void *);
 
 class il2cpp_dumper {
 public:
-	static void run();
+    static void run();
 };

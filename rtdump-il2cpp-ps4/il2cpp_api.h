@@ -148,10 +148,10 @@ extern il2cpp_property_get_name_t il2cpp_property_get_name;
 
 class il2cpp_api {
 public:
-	static uintptr_t base_address;
+    static uintptr_t base_address;
 
-	static bool init();
+    static bool init();
 
 private:
-	static uintptr_t find_function_by_name(const char *name);
+    static uintptr_t find_function_by_name(const char *name);
 };

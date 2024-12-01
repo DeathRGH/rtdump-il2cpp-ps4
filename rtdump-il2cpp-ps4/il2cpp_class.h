@@ -110,14 +110,14 @@ struct VirtualInvokeData {
     const MethodInfo *method;
 };
 
-typedef struct Il2CppArrayType {
+struct Il2CppArrayType {
     const struct Il2CppType *etype;
     uint8_t rank;
     uint8_t numsizes;
     uint8_t numlobounds;
     int *sizes;
     int *lobounds;
-} Il2CppArrayType;
+};
 
 struct Il2CppType {
     union {
