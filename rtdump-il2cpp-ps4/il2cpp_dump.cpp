@@ -61,6 +61,101 @@ bool _il2cpp_type_is_byref(const Il2CppType *type) {
     return byref;
 }
 
+const char *_il2cpp_class_get_name(Il2CppClass *klass) {
+    const char *internal_name = il2cpp_class_get_name(klass);
+
+    if (!strcmp(internal_name, "Object")) {
+        return "object";
+    }
+    if (!strcmp(internal_name, "Void")) {
+        return "void";
+    }
+    if (!strcmp(internal_name, "Boolean")) {
+        return "bool";
+    }
+    if (!strcmp(internal_name, "Byte")) {
+        return "byte";
+    }
+    if (!strcmp(internal_name, "SByte")) {
+        return "sbyte";
+    }
+    if (!strcmp(internal_name, "Int16")) {
+        return "short";
+    }
+    if (!strcmp(internal_name, "UInt16")) {
+        return "ushort";
+    }
+    if (!strcmp(internal_name, "Int32")) {
+        return "int";
+    }
+    if (!strcmp(internal_name, "UInt32")) {
+        return "uint";
+    }
+    if (!strcmp(internal_name, "Int64")) {
+        return "long";
+    }
+    if (!strcmp(internal_name, "UInt64")) {
+        return "ulong";
+    }
+    if (!strcmp(internal_name, "Single")) {
+        return "float";
+    }
+    if (!strcmp(internal_name, "Double")) {
+        return "double";
+    }
+    if (!strcmp(internal_name, "Char")) {
+        return "char";
+    }
+    if (!strcmp(internal_name, "String")) {
+        return "string";
+    }
+
+    if (!strcmp(internal_name, "Object[]")) {
+        return "object[]";
+    }
+    if (!strcmp(internal_name, "Boolean[]")) {
+        return "bool[]";
+    }
+    if (!strcmp(internal_name, "Byte[]")) {
+        return "byte[]";
+    }
+    if (!strcmp(internal_name, "SByte[]")) {
+        return "sbyte[]";
+    }
+    if (!strcmp(internal_name, "Int16[]")) {
+        return "short[]";
+    }
+    if (!strcmp(internal_name, "UInt16[]")) {
+        return "ushort[]";
+    }
+    if (!strcmp(internal_name, "Int32[]")) {
+        return "int[]";
+    }
+    if (!strcmp(internal_name, "UInt32[]")) {
+        return "uint[]";
+    }
+    if (!strcmp(internal_name, "Int64[]")) {
+        return "long[]";
+    }
+    if (!strcmp(internal_name, "UInt64[]")) {
+        return "ulong[]";
+    }
+    if (!strcmp(internal_name, "Single[]")) {
+        return "float[]";
+    }
+    if (!strcmp(internal_name, "Double[]")) {
+        return "double[]";
+    }
+    if (!strcmp(internal_name, "Char[]")) {
+        return "char[]";
+    }
+    if (!strcmp(internal_name, "String[]")) {
+        return "string[]";
+    }
+
+    return internal_name;
+}
+
 std::string dump_method(Il2CppClass *klass) {
     std::stringstream output;
     output << "\n\t// Methods\n";
@@ -89,7 +184,7 @@ std::string dump_method(Il2CppClass *klass) {
             output << "ref ";
         }
         Il2CppClass *return_class = il2cpp_class_from_type(return_type);
-        output << il2cpp_class_get_name(return_class) << " " << il2cpp_method_get_name(method) << "(";
+        output << _il2cpp_class_get_name(return_class) << " " << il2cpp_method_get_name(method) << "(";
         unsigned int param_count = il2cpp_method_get_param_count(method);
         for (int i = 0; i < param_count; ++i) {
             const Il2CppType *param = il2cpp_method_get_param(method, i);
@@ -114,7 +209,7 @@ std::string dump_method(Il2CppClass *klass) {
                 }
             }
             Il2CppClass *parameter_class = il2cpp_class_from_type(param);
-            output << il2cpp_class_get_name(parameter_class) << " " << il2cpp_method_get_param_name(method, i);
+            output << _il2cpp_class_get_name(parameter_class) << " " << il2cpp_method_get_param_name(method, i);
             output << ", ";
         }
         if (param_count > 0) {
@@ -150,7 +245,7 @@ std::string dump_property(Il2CppClass *klass) {
             prop_class = il2cpp_class_from_type(param);
         }
         if (prop_class) {
-            output << il2cpp_class_get_name(prop_class) << " " << prop_name << " { ";
+            output << _il2cpp_class_get_name(prop_class) << " " << prop_name << " { ";
             if (get) {
                 output << "get; ";
             }
@@ -209,7 +304,8 @@ std::string dump_field(Il2CppClass *klass) {
         }
         const Il2CppType *field_type = il2cpp_field_get_type(field);
         Il2CppClass *field_class = il2cpp_class_from_type(field_type);
-        output << il2cpp_class_get_name(field_class) << " " << il2cpp_field_get_name(field);
+        output << _il2cpp_class_get_name(field_class) << " " << il2cpp_field_get_name(field);
+
         // TODO Get the field value after the constructor is initialized
         if (attrs & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
             uint64_t val = 0;
