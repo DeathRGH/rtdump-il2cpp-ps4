@@ -110,7 +110,7 @@ uintptr_t find_register_symbols_addr() {
 	// ??
 	// mov     edi, 0x30
 	addr = find_pattern("Il2CppUserAssemblies", "55 48 89 E5 41 56 53 48 83 EC ?? ?? ?? ?? ?? ?? ?? ?? BF 30 00 00 00");
-	if (!addr) {
+	if (addr) {
 		index_offset = 0x50;
 		string_end_offset = 0x38;
 		string_function_offset = 0x22;
