@@ -103,6 +103,13 @@ enum Il2CppTypeEnum {
     IL2CPP_TYPE_IL2CPP_TYPE_INDEX = 0xFF
 };
 
+struct MethodInfo;
+
+struct VirtualInvokeData {
+    Il2CppMethodPointer methodPtr;
+    const MethodInfo *method;
+};
+
 struct Il2CppType {
     union {
         void *dummy;
@@ -119,16 +126,62 @@ struct Il2CppType {
     unsigned int pinned : 1;
 };
 
-struct MethodInfo {
-    Il2CppMethodPointer methodPointer;
+struct Il2CppGenericInst {
+    uint32_t type_argc;
+    const Il2CppType **type_argv;
 };
 
+struct Il2CppGenericClass {
+    Il2CppClass *type;
+    Il2CppGenericInst *context;
+    Il2CppClass *cached_class;
+};
+
+struct Il2CppClass;
+
 struct Il2CppObject {
-    union {
-        Il2CppClass *klass;
-        Il2CppVTable *vtable;
-    };
-    MonitorData *monitor;
+    Il2CppClass *klass;
+    void *monitor;
+};
+
+union Il2CppRGCTXData {
+    void *rgctxDataDummy;
+    const MethodInfo *method;
+    const Il2CppType *type;
+    Il2CppClass *klass;
+};
+
+struct Il2CppRuntimeInterfaceOffsetPair {
+    Il2CppClass *interfaceType;
+    int32_t offset;
+};
+
+struct Il2CppClass {
+    void *image;
+    void *gc_desc;
+    const char *name;
+    const char *namespaze;
+    Il2CppType byval_arg;
+    Il2CppType this_arg;
+    Il2CppClass *element_class;
+    Il2CppClass *castClass;
+    Il2CppClass *declaringType;
+    Il2CppClass *parent;
+    Il2CppGenericClass *generic_class;
+    void *typeMetadataHandle;
+    void *interopData;
+    Il2CppClass *klass;
+    void *fields;
+    void *events;
+    void *properties;
+    void *methods;
+    Il2CppClass **nestedTypes;
+    Il2CppClass **implementedInterfaces;
+    Il2CppRuntimeInterfaceOffsetPair *interfaceOffsets;
+};
+
+struct MethodInfo {
+    Il2CppMethodPointer methodPointer;
 };
 
 struct Il2CppArray {

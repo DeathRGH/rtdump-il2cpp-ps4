@@ -156,6 +156,35 @@ const char *_il2cpp_class_get_name(Il2CppClass *klass) {
     return internal_name;
 }
 
+std::string resolve_generic_type(Il2CppClass *klass) {
+    if (!klass->generic_class) {
+        return _il2cpp_class_get_name(klass);
+    }
+
+    // base type name
+    std::string generic_name = klass->name;
+
+    // remove placeholder
+    size_t pos = generic_name.find("`1");
+    if (pos != std::string::npos) {
+        generic_name.erase(pos, 2);
+    }
+    generic_name += "<";
+
+    Il2CppGenericInst *generic_inst = klass->generic_class->context;
+    for (size_t i = 0; i < generic_inst->type_argc; ++i) {
+        if (i > 0) generic_name += ", ";
+
+        const Il2CppType *arg_type = generic_inst->type_argv[i];
+        Il2CppClass *arg_class = il2cpp_class_from_type(arg_type);
+
+        generic_name += resolve_generic_type(arg_class);
+    }
+
+    generic_name += ">";
+    return generic_name;
+}
+
 std::string dump_method(Il2CppClass *klass) {
     std::stringstream output;
     output << "\n\t// Methods\n";
@@ -184,7 +213,7 @@ std::string dump_method(Il2CppClass *klass) {
             output << "ref ";
         }
         Il2CppClass *return_class = il2cpp_class_from_type(return_type);
-        output << _il2cpp_class_get_name(return_class) << " " << il2cpp_method_get_name(method) << "(";
+        output << resolve_generic_type(return_class) << " " << il2cpp_method_get_name(method) << "(";
         unsigned int param_count = il2cpp_method_get_param_count(method);
         for (int i = 0; i < param_count; ++i) {
             const Il2CppType *param = il2cpp_method_get_param(method, i);
@@ -209,7 +238,7 @@ std::string dump_method(Il2CppClass *klass) {
                 }
             }
             Il2CppClass *parameter_class = il2cpp_class_from_type(param);
-            output << _il2cpp_class_get_name(parameter_class) << " " << il2cpp_method_get_param_name(method, i);
+            output << resolve_generic_type(parameter_class) << " " << il2cpp_method_get_param_name(method, i);
             output << ", ";
         }
         if (param_count > 0) {
@@ -245,7 +274,7 @@ std::string dump_property(Il2CppClass *klass) {
             prop_class = il2cpp_class_from_type(param);
         }
         if (prop_class) {
-            output << _il2cpp_class_get_name(prop_class) << " " << prop_name << " { ";
+            output << resolve_generic_type(prop_class) << " " << prop_name << " { ";
             if (get) {
                 output << "get; ";
             }
@@ -302,9 +331,11 @@ std::string dump_field(Il2CppClass *klass) {
                 output << "readonly ";
             }
         }
+
         const Il2CppType *field_type = il2cpp_field_get_type(field);
         Il2CppClass *field_class = il2cpp_class_from_type(field_type);
-        output << _il2cpp_class_get_name(field_class) << " " << il2cpp_field_get_name(field);
+
+        output << resolve_generic_type(field_class) << " " << il2cpp_field_get_name(field);
 
         // TODO Get the field value after the constructor is initialized
         if (attrs & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
