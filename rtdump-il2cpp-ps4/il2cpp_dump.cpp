@@ -164,8 +164,8 @@ std::string resolve_generic_type(Il2CppClass *klass) {
     // base type name
     std::string generic_name = klass->name;
 
-    // remove placeholder
-    size_t pos = generic_name.find("`1");
+    // remove placeholders
+    size_t pos = generic_name.find("`");
     if (pos != std::string::npos) {
         generic_name.erase(pos, 2);
     }
