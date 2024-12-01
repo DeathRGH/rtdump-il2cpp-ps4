@@ -173,7 +173,9 @@ std::string resolve_generic_type(Il2CppClass *klass) {
 
     Il2CppGenericInst *generic_inst = klass->generic_class->context;
     for (size_t i = 0; i < generic_inst->type_argc; ++i) {
-        if (i > 0) generic_name += ", ";
+        if (i > 0) {
+            generic_name += ", ";
+        }
 
         const Il2CppType *arg_type = generic_inst->type_argv[i];
         Il2CppClass *arg_class = il2cpp_class_from_type(arg_type);
@@ -183,6 +185,18 @@ std::string resolve_generic_type(Il2CppClass *klass) {
 
     generic_name += ">";
     return generic_name;
+}
+
+std::string resolve_type(const Il2CppType *type) {
+    switch (type->type) {
+    case IL2CPP_TYPE_SZARRAY: {
+        std::string element_type = resolve_type(type->data.type);
+        return element_type + "[]";
+    }
+    default:
+        Il2CppClass *klass = il2cpp_class_from_type(type);
+        return resolve_generic_type(klass);
+    }
 }
 
 std::string dump_method(Il2CppClass *klass) {
@@ -333,9 +347,9 @@ std::string dump_field(Il2CppClass *klass) {
         }
 
         const Il2CppType *field_type = il2cpp_field_get_type(field);
-        Il2CppClass *field_class = il2cpp_class_from_type(field_type);
+        std::string field_type_name = resolve_type(field_type);
 
-        output << resolve_generic_type(field_class) << " " << il2cpp_field_get_name(field);
+        output << field_type_name << " " << il2cpp_field_get_name(field);
 
         // TODO Get the field value after the constructor is initialized
         if (attrs & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
@@ -459,14 +473,14 @@ void il2cpp_dump() {
             printf("Dumping %i/%li ...\n", i + 1, size);
 
             const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
-            std::stringstream imageStr;
-            imageStr << "\n// Dll : " << il2cpp_image_get_name(image);
+            std::stringstream image_str;
+            image_str << "\n// Dll : " << il2cpp_image_get_name(image);
             size_t class_count = il2cpp_image_get_class_count(image);
             for (int j = 0; j < class_count; ++j) {
                 const Il2CppClass *klass = il2cpp_image_get_class(image, j);
                 const Il2CppType *type = il2cpp_class_get_type(const_cast<Il2CppClass *>(klass));
                 //printf("type name : %s\n", il2cpp_type_get_name(type));
-                std::string outPut = imageStr.str() + dump_type(type);
+                std::string outPut = image_str.str() + dump_type(type);
                 output_array.push_back(outPut);
             }
         }
