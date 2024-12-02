@@ -162,7 +162,7 @@ std::string il2cpp_class_get_name_cpp(Il2CppClass *klass) {
         return "char";
     }
     if (internal_name == "String") {
-        return "string";
+        return "struct System_String_o*";
     }
 
     if (internal_name == "Object[]") {
@@ -217,6 +217,9 @@ std::string il2cpp_class_get_name_cpp(Il2CppClass *klass) {
     //    return "struct " + resolve_full_type(klass);
     //}
 
+    // @todo: check for enum type
+    //        the check above did not work
+    //        also not when checking klass->declaringType
     return "struct " + resolve_full_type(klass);
 }
 
@@ -263,25 +266,42 @@ std::string resolve_type_cpp(const Il2CppType *type) {
     }
 }
 
-std::string generate_fields(Il2CppClass *klass, std::string full_type) {
+std::string generate_field(FieldInfo *field) {
     std::stringstream output;
-    output << "struct " << full_type << "_Fields {\n";
+    output << "\t";
+
+    const Il2CppType *field_type = il2cpp_field_get_type(field);
+    std::string field_type_name = resolve_type_cpp(field_type);
+
+    output << field_type_name << " " << il2cpp_field_get_name(field);
+    output << ";\n";
+
+    return output.str();
+}
+
+std::string generate_fields(Il2CppClass *klass, std::string full_type_name) {
+    std::stringstream output;
+
+    Il2CppClass *parent_class = il2cpp_class_get_parent(klass);
+    if (parent_class && (parent_class->field_count > 0)) {
+        std::string full_parent_type = resolve_full_type(parent_class);
+        output << "struct " << full_type_name << "_Fields : " << full_parent_type << "_Fields {\n";
+    }
+    else {
+        output << "struct " << full_type_name << "_Fields {\n";
+    }
+
     void *iter = nullptr;
     while (FieldInfo *field = il2cpp_class_get_fields(klass, &iter)) {
         int flags = il2cpp_field_get_flags(field);
         if (flags & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
             continue; // skip enum values
         }
+        if (flags & FIELD_ATTRIBUTE_STATIC) {
+            continue; // skip static fields in fields gen
+        }
 
-        output << "\t";
-
-        const Il2CppType *field_type = il2cpp_field_get_type(field);
-        std::string field_type_name = resolve_type_cpp(field_type);
-
-        output << field_type_name << " " << il2cpp_field_get_name(field);
-
-        output << ";\n";
-        //output << "; // 0x" << std::hex << il2cpp_field_get_offset(field) << "\n";
+        output << generate_field(field);
     }
 
     output << "};\n";
@@ -289,13 +309,13 @@ std::string generate_fields(Il2CppClass *klass, std::string full_type) {
     return output.str();
 }
 
-std::string generate_vtable(Il2CppClass *klass, std::string full_type) {
+std::string generate_vtable(Il2CppClass *klass, std::string full_type_name) {
     if (klass->vtable_count <= 0) {
         return "";
     }
     
     std::stringstream output;
-    output << "struct " << full_type << "_VTable {\n";
+    output << "struct " << full_type_name << "_VTable {\n";
 
     for (int i = 0; i < klass->vtable_count; i++) {
         output << "\tVirtualInvokeData _" << i << "_";
@@ -311,6 +331,72 @@ std::string generate_vtable(Il2CppClass *klass, std::string full_type) {
     //output << "\nklass: 0x" << klass << "\n";
     //output << "klass->vtable_count: " << klass->vtable_count << "\n";
     //output << "klass->vtable[0]: 0x" << &klass->vtable[0] << "\n";
+
+    output << "};\n";
+
+    return output.str();
+}
+
+std::string generate_struct_c(Il2CppClass *klass, std::string full_type_name) {
+    std::stringstream output;
+    output << "struct " << full_type_name << "_c {\n";
+
+    output << "\tIl2CppClass_1 _1;\n";
+    if (klass->static_fields_size > 0) {
+        output << "\tstruct " << full_type_name << "_StaticFields* static_fields;\n";
+    }
+    else {
+        output << "\tvoid *static_fields;\n";
+    }
+    
+    // @todo: "_RGCTXs* rgctx_data;\n"
+    output << "\tIl2CppRGCTXData* rgctx_data;\n";
+
+    output << "\tIl2CppClass_2 _2;\n";
+    if (klass->vtable_count > 0) {
+        output << "\t" << full_type_name << "_VTable {\n";
+    }
+
+    output << "};\n";
+
+    return output.str();
+}
+
+std::string generate_struct_o(Il2CppClass *klass, std::string full_type_name) {
+    std::stringstream output;
+    output << "struct " << full_type_name << "_o {\n";
+
+    if (klass->declaringType && il2cpp_class_is_valuetype(klass->declaringType)) {
+        output << "\t" << full_type_name << "_c *klass;\n";
+        output << "\tvoid *monitor;\n";
+    }
+    output << "\t" << full_type_name << "_Fields fields;\n";
+
+    output << "};\n";
+
+    return output.str();
+}
+
+std::string generate_static_fields(Il2CppClass *klass, std::string full_type_name) {
+    if (klass->static_fields_size <= 0) {
+        return "";
+    }
+
+    std::stringstream output;
+    output << "struct " << full_type_name << "_StaticFields {\n";
+
+    void *iter = nullptr;
+    while (FieldInfo *field = il2cpp_class_get_fields(klass, &iter)) {
+        int flags = il2cpp_field_get_flags(field);
+        if (flags & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
+            continue; // skip enum values
+        }
+        if (!(flags & FIELD_ATTRIBUTE_STATIC)) {
+            continue; // skip non static fields in static fields gen
+        }
+
+        output << generate_field(field);
+    }
 
     output << "};\n";
 
@@ -357,12 +443,13 @@ std::string generate_type(const Il2CppType *type) {
     //}
 
     //output << " {";
-    // @todo: figure out whats wrong with some fields not dumping in og dumper but do dump with this
     output << generate_fields(klass, full_type);
     // @todo: some vtables dont have names, figure out why
+    //        does not matter as the size of the structure is correct anyways
     output << generate_vtable(klass, full_type);
-    // @todo: struct _c
-    // @todo: struct _o
+    output << generate_struct_c(klass, full_type);
+    output << generate_struct_o(klass, full_type);
+    output << generate_static_fields(klass, full_type);
     //output << "};\n";
 
     return output.str();
@@ -398,14 +485,53 @@ void il2cpp_structs_generate() {
             size_t class_count = il2cpp_image_get_class_count(image);
             for (int j = 0; j < class_count; ++j) {
                 const Il2CppClass *klass = il2cpp_image_get_class(image, j);
-                const Il2CppType *type = il2cpp_class_get_type(const_cast<Il2CppClass *>(klass));
+                const Il2CppType *type = il2cpp_class_get_type((Il2CppClass *)klass);
                 std::string output = image_str.str() + generate_type(type);
                 output_array.push_back(output);
             }
         }
     }
     else {
-        // for testing we stick to newer versions
+        printf("Version less than 2018.3\n");
+        // using reflection
+        const Il2CppImage *corlib = il2cpp_get_corlib();
+        Il2CppClass *assembly_class = il2cpp_class_from_name(corlib, "System.Reflection", "Assembly");
+        const MethodInfo *assembly_load = il2cpp_class_get_method_from_name(assembly_class, "Load", 1);
+        const MethodInfo *assembly_get_types = il2cpp_class_get_method_from_name(assembly_class, "GetTypes", 0);
+        if (assembly_load && assembly_load->methodPointer) {
+            printf("Assembly::Load: %p\n", assembly_load->methodPointer);
+        }
+        else {
+            printf("miss Assembly::Load\n");
+            return;
+        }
+        if (assembly_get_types && assembly_get_types->methodPointer) {
+            printf("Assembly::GetTypes: %p\n", assembly_get_types->methodPointer);
+        }
+        else {
+            printf("miss Assembly::GetTypes\n");
+            return;
+        }
+        for (int i = 0; i < size; ++i) {
+            printf("Generating %i/%li ...\n", i + 1, size);
+
+            const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
+            std::stringstream image_str;
+            const char *image_name = il2cpp_image_get_name(image);
+            std::string std_image_name = std::string(image_name);
+            size_t pos = std_image_name.rfind('.');
+            std::string image_name_no_ext = std_image_name.substr(0, pos);
+            Il2CppString *assembly_file_name = il2cpp_string_new(image_name_no_ext.data());
+            void *reflection_assembly = ((Assembly_Load_t)assembly_load->methodPointer)(nullptr, assembly_file_name, nullptr);
+            Il2CppArray *reflection_types = ((Assembly_GetTypes_t)assembly_get_types->methodPointer)(reflection_assembly, nullptr);
+            void **items = reflection_types->vector;
+            for (int j = 0; j < reflection_types->max_length; ++j) {
+                Il2CppClass *klass = il2cpp_class_from_system_type((Il2CppReflectionType *)items[j]);
+                const Il2CppType *type = il2cpp_class_get_type(klass);
+                std::string output = image_str.str() + generate_type(type);
+                output_array.push_back(output);
+            }
+        }
     }
 
 

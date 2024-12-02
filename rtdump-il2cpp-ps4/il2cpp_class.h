@@ -190,7 +190,6 @@ struct Il2CppClass {
     Il2CppClass **nestedTypes;
     Il2CppClass **implementedInterfaces;
     Il2CppRuntimeInterfaceOffsetPair *interfaceOffsets;
-    // new fields:
     void *static_fields;
     const Il2CppRGCTXData *rgctx_data;
     Il2CppClass **typeHierarchy;    // 0xC8

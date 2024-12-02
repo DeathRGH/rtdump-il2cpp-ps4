@@ -273,7 +273,7 @@ std::string dump_property(Il2CppClass *klass) {
     void *iter = nullptr;
     while (const PropertyInfo *prop_const = il2cpp_class_get_properties(klass, &iter)) {
         // TODO attribute
-        PropertyInfo *prop = const_cast<PropertyInfo *>(prop_const);
+        PropertyInfo *prop = (PropertyInfo *)prop_const;
         const MethodInfo *get = il2cpp_property_get_get_method(prop);
         const MethodInfo *set = il2cpp_property_get_set_method(prop);
         const char *prop_name = il2cpp_property_get_name(prop);
@@ -480,7 +480,7 @@ void il2cpp_dump() {
             size_t class_count = il2cpp_image_get_class_count(image);
             for (int j = 0; j < class_count; ++j) {
                 const Il2CppClass *klass = il2cpp_image_get_class(image, j);
-                const Il2CppType *type = il2cpp_class_get_type(const_cast<Il2CppClass *>(klass));
+                const Il2CppType *type = il2cpp_class_get_type((Il2CppClass *)klass);
                 //printf("type name : %s\n", il2cpp_type_get_name(type));
                 std::string output = image_str.str() + dump_type(type);
                 output_array.push_back(output);
@@ -509,6 +509,8 @@ void il2cpp_dump() {
             return;
         }
         for (int i = 0; i < size; ++i) {
+            printf("Dumping %i/%li ...\n", i + 1, size);
+
             const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
             std::stringstream image_str;
             const char *image_name = il2cpp_image_get_name(image);
