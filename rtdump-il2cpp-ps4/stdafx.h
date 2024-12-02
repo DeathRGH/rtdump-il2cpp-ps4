@@ -2,10 +2,12 @@
 
 #include <stdint.h>
 
+#include <mutex>
 #include <string>
 #include <sstream>
 #include <fstream>
 #include <vector>
+#include <algorithm>
 
 #include <kernel.h>
 #include <libdbg.h>

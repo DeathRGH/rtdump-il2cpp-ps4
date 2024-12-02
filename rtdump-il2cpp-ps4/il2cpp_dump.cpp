@@ -1,5 +1,7 @@
 #include "stdafx.h"
 
+std::mutex dumper_lock;
+
 std::string get_method_modifier(uint32_t flags) {
     std::stringstream output;
     unsigned int access = flags & METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK;
@@ -480,8 +482,8 @@ void il2cpp_dump() {
                 const Il2CppClass *klass = il2cpp_image_get_class(image, j);
                 const Il2CppType *type = il2cpp_class_get_type(const_cast<Il2CppClass *>(klass));
                 //printf("type name : %s\n", il2cpp_type_get_name(type));
-                std::string outPut = image_str.str() + dump_type(type);
-                output_array.push_back(outPut);
+                std::string output = image_str.str() + dump_type(type);
+                output_array.push_back(output);
             }
         }
     }
@@ -547,7 +549,12 @@ void il2cpp_dump() {
 void il2cpp_dumper::run() {
     ScePthread dump_thread;
     scePthreadCreate(&dump_thread, nullptr, [](void *) -> void * {
-        il2cpp_dump();
+        if (dumper_lock.try_lock()) {
+            printf("Starting dumper...\n");
+            il2cpp_dump();
+
+            dumper_lock.unlock();
+        }
 
         return nullptr;
     }, nullptr, "dump_thread");

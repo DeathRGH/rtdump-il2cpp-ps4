@@ -18,11 +18,8 @@ extern "C" {
 
             printf("[il2cpp] Initializing...\n");
             if (il2cpp_api::init()) {
-                printf("Starting dumper...\n");
                 il2cpp_dumper::run();
-
-                //printf("Starting struct generator...\n");
-                //il2cpp_struct_gen::run();
+                il2cpp_struct_gen::run();
             }
             else {
                 printf("[il2cpp] Failed to initialize!\nNot dumping anything :(\n");
