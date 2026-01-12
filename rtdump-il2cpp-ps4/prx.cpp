@@ -1,52 +1,48 @@
 #include "stdafx.h"
 
-extern "C" {
-    int __cdecl module_start(size_t argc, const void *args) {
-        ScePthread entry_thread;
-        scePthreadCreate(&entry_thread, nullptr, [](void *) -> void * {
-            printf("         __       ___                    \n");
-            printf("________/  |_  __| _/_ __  _____ ______  \n");
-            printf("\\_  __ \\   __\\/ __ |  |  \\/     \\\\____ \\ \n");
-            printf(" |  | \\/|  | / /_/ |  |  /  Y Y  \\  |_> >\n");
-            printf(" |__|   |__| \\____ |____/|__|_|  /   __/ \n");
-            printf("                  \\/           \\/|__|    \n");
-            printf("rtdump-il2cpp-ps4\n");
-            printf("A runtime il2cpp dumper for Unity games!\n\n");
+void *module_start_thread_func(void *) {
+    printf("\n\n         __       ___                    \n");
+    printf("________/  |_  __| _/_ __  _____ ______  \n");
+    printf("\\_  __ \\   __\\/ __ |  |  \\/     \\\\____ \\ \n");
+    printf(" |  | \\/|  | / /_/ |  |  /  Y Y  \\  |_> >\n");
+    printf(" |__|   |__| \\____ |____/|__|_|  /   __/ \n");
+    printf("                  \\/           \\/|__|    \n");
+    printf("rtdump-il2cpp\n");
+    printf("A runtime il2cpp dumper for Unity games!\n\n");
 
-            // make dumping directory
-            sceKernelMkdir("/data/il2cpp", 0777);
+    // create dumping directory
+    sceKernelMkdir("/data/il2cpp", SCE_KERNEL_S_IRWU);
 
-            printf("[il2cpp] Initializing...\n");
-            if (il2cpp_api::init()) {
-                il2cpp_dumper::run();
-                il2cpp_struct_gen::run();
-            }
-            else {
-                printf("[il2cpp] Failed to initialize!\nNot dumping anything :(\n");
-            }
-
-            scePthreadExit(nullptr);
-
-            return nullptr;
-        }, nullptr, "module_start");
-
-        scePthreadJoin(entry_thread, nullptr);
-
-        return SCE_OK;
+    printf("[il2cpp] Initializing...\n");
+    if (il2cpp_api::init()) {
+        il2cpp_dumper::run();
+        il2cpp_struct_gen::run();
+    }
+    else {
+        printf("[il2cpp] Failed to initialize!\nNot dumping anything :(\n");
     }
 
-    int __cdecl module_stop(size_t argc, const void *args) {
-        ScePthread exit_thread;
-        scePthreadCreate(&exit_thread, nullptr, [](void *) -> void * {
-            printf("Unloading...\n");
+    return nullptr;
+}
 
-            scePthreadExit(nullptr);
+void *module_stop_thread_func(void *) {
+    printf("Unloading rtdump-il2cpp...\n");
 
-            return nullptr;
-        }, nullptr, "module_stop");
+    return nullptr;
+}
 
-        scePthreadJoin(exit_thread, nullptr);
+extern "C" {
+    int32_t module_start(size_t argc, const void *args) {
+        ScePthread module_start_thread;
+        scePthreadCreate(&module_start_thread, nullptr, module_start_thread_func, nullptr, nullptr);
+        scePthreadJoin(module_start_thread, nullptr);
+        return 0;
+    }
 
-        return SCE_OK;
+    int32_t module_stop(size_t argc, const void *args) {
+        ScePthread module_stop_thread;
+        scePthreadCreate(&module_stop_thread, nullptr, module_stop_thread_func, nullptr, nullptr);
+        scePthreadJoin(module_stop_thread, nullptr);
+        return 0;
     }
 }
