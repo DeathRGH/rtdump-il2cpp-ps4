@@ -6,7 +6,7 @@ uint64_t resolve_module_base(const char *name) {
     SceDbgModule modules[30];
     size_t moduleCount;
     sceKernelGetModuleList(modules, 30, &moduleCount);
-    for (int i = 0; i < moduleCount; i++) {
+    for (int32_t i = 0; i < moduleCount; i++) {
         SceDbgModule &module = modules[i];
         if (module != 0) {
             SceKernelModuleInfo info;
@@ -22,12 +22,12 @@ uint64_t resolve_module_base(const char *name) {
     return 0;
 }
 
-int get_size(const char *name) {
-    int size = 0;
+int32_t get_size(const char *name) {
+    int32_t size = 0;
     SceDbgModule modules[30];
     size_t moduleCount;
     sceKernelGetModuleList(modules, 30, &moduleCount);
-    for (int i = 0; i < moduleCount; i++) {
+    for (int32_t i = 0; i < moduleCount; i++) {
         SceDbgModule &module = modules[i];
         if (module != 0) {
             SceKernelModuleInfo info;
@@ -35,7 +35,7 @@ int get_size(const char *name) {
             sceKernelGetModuleInfo(module, &info);
 
             if (strstr(info.name, name)) {
-                for (int i = 0; i < info.segmentCount; i++) {
+                for (int32_t i = 0; i < info.segmentCount; i++) {
                     if (info.segmentInfo[i].prot == 5) {
                         size += info.segmentInfo[i].size;
                     }

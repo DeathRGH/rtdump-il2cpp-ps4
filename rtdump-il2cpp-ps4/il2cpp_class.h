@@ -34,7 +34,7 @@ typedef const struct ___Il2CppMetadataTypeHandle *Il2CppMetadataTypeHandle;
 typedef const struct ___Il2CppMetadataGenericParameterHandle *Il2CppMetadataGenericParameterHandle;
 
 typedef void (*Il2CppMethodPointer)();
-typedef void (*il2cpp_register_object_callback)(Il2CppObject **arr, int size, void *userdata);
+typedef void (*il2cpp_register_object_callback)(Il2CppObject **arr, int32_t size, void *userdata);
 typedef void *(*il2cpp_liveness_reallocate_callback)(void *ptr, size_t size, void *userdata);
 typedef void (*Il2CppFrameWalkFunc)(const Il2CppStackFrameInfo *info, void *user_data);
 typedef size_t(*Il2CppBacktraceFunc)(Il2CppMethodPointer *buffer, size_t maxSize);
@@ -115,8 +115,8 @@ struct Il2CppArrayType {
     uint8_t rank;
     uint8_t numsizes;
     uint8_t numlobounds;
-    int *sizes;
-    int *lobounds;
+    int32_t*sizes;
+    int32_t*lobounds;
 };
 
 struct Il2CppType {
@@ -128,11 +128,11 @@ struct Il2CppType {
         GenericParameterIndex genericParameterIndex;
         Il2CppGenericClass *generic_class;
     } data;
-    unsigned int attrs : 16;
+    uint32_t attrs : 16;
     Il2CppTypeEnum type : 8;
-    unsigned int num_mods : 6;
-    unsigned int byref : 1;
-    unsigned int pinned : 1;
+    uint32_t num_mods : 6;
+    uint32_t byref : 1;
+    uint32_t pinned : 1;
 };
 
 struct Il2CppGenericInst {

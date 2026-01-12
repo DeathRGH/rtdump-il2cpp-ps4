@@ -1,7 +1,7 @@
 #include "stdafx.h"
 
 uintptr_t il2cpp_api::base_address = 0;
-int il2cpp_api::handle = 0;
+int32_t il2cpp_api::handle = 0;
 bool il2cpp_api::has_error = false;
 
 

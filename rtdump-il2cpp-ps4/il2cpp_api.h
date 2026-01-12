@@ -45,13 +45,13 @@ extern il2cpp_class_from_type_t il2cpp_class_from_type;
 typedef FieldInfo *(*il2cpp_class_get_fields_t)(Il2CppClass *klass, void **iter);
 extern il2cpp_class_get_fields_t il2cpp_class_get_fields;
 
-typedef int(*il2cpp_class_get_flags_t)(const Il2CppClass *klass);
+typedef int32_t(*il2cpp_class_get_flags_t)(const Il2CppClass *klass);
 extern il2cpp_class_get_flags_t il2cpp_class_get_flags;
 
 typedef Il2CppClass *(*il2cpp_class_get_interfaces_t)(Il2CppClass *klass, void **iter);
 extern il2cpp_class_get_interfaces_t il2cpp_class_get_interfaces;
 
-typedef const MethodInfo *(*il2cpp_class_get_method_from_name_t)(Il2CppClass *klass, const char *name, int argsCount);
+typedef const MethodInfo *(*il2cpp_class_get_method_from_name_t)(Il2CppClass *klass, const char *name, int32_t argsCount);
 extern il2cpp_class_get_method_from_name_t il2cpp_class_get_method_from_name;
 
 typedef const MethodInfo *(*il2cpp_class_get_methods_t)(Il2CppClass *klass, void **iter);
@@ -81,7 +81,7 @@ extern il2cpp_class_is_valuetype_t il2cpp_class_is_valuetype;
 
 
 // field
-typedef int(*il2cpp_field_get_flags_t)(FieldInfo *field);
+typedef int32_t(*il2cpp_field_get_flags_t)(FieldInfo *field);
 extern il2cpp_field_get_flags_t il2cpp_field_get_flags;
 
 typedef const char *(*il2cpp_field_get_name_t)(FieldInfo *field);
@@ -149,7 +149,7 @@ extern il2cpp_property_get_name_t il2cpp_property_get_name;
 class il2cpp_api {
 public:
     static uintptr_t base_address;
-    static int handle;
+    static int32_t handle;
 
     static bool init();
 

@@ -20,8 +20,8 @@ extern "C" {
         uint8_t fingerprint[20];
     } SceKernelModuleInfo;
 
-    int sceKernelGetModuleList(int *arr, size_t size, size_t *available);
-    int sceKernelGetModuleInfo(int handle, SceKernelModuleInfo *info);
+    int32_t sceKernelGetModuleList(int32_t *arr, size_t size, size_t *available);
+    int32_t sceKernelGetModuleInfo(int32_t handle, SceKernelModuleInfo *info);
 
 #ifdef __cplusplus
 }

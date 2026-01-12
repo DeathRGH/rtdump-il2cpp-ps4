@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-int get_il2cpp_version() {
+int32_t get_il2cpp_version() {
     const char *file_path = "/app0/Media/Metadata/global-metadata.dat";
 
     std::ifstream file(file_path, std::ios::binary);
@@ -15,7 +15,7 @@ int get_il2cpp_version() {
         return -1;
     }
 
-    int value = -1;
+    int32_t value = -1;
     file.read(reinterpret_cast<char *>(&value), sizeof(value));
     if (!file) {
         printf("Error reading from file \"global-metadata.dat\"!\n");
@@ -293,7 +293,7 @@ std::string generate_fields(Il2CppClass *klass, std::string full_type_name) {
 
     void *iter = nullptr;
     while (FieldInfo *field = il2cpp_class_get_fields(klass, &iter)) {
-        int flags = il2cpp_field_get_flags(field);
+        int32_t flags = il2cpp_field_get_flags(field);
         if (flags & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
             continue; // skip enum values
         }
@@ -317,7 +317,7 @@ std::string generate_vtable(Il2CppClass *klass, std::string full_type_name) {
     std::stringstream output;
     output << "struct " << full_type_name << "_VTable {\n";
 
-    for (int i = 0; i < klass->vtable_count; i++) {
+    for (int32_t i = 0; i < klass->vtable_count; i++) {
         output << "\tVirtualInvokeData _" << i << "_";
         if (klass->vtable[i].method) {
             std::string method_name = il2cpp_method_get_name(klass->vtable[i].method);
@@ -387,7 +387,7 @@ std::string generate_static_fields(Il2CppClass *klass, std::string full_type_nam
 
     void *iter = nullptr;
     while (FieldInfo *field = il2cpp_class_get_fields(klass, &iter)) {
-        int flags = il2cpp_field_get_flags(field);
+        int32_t flags = il2cpp_field_get_flags(field);
         if (flags & FIELD_ATTRIBUTE_LITERAL && il2cpp_class_is_enum(klass)) {
             continue; // skip enum values
         }
@@ -407,7 +407,7 @@ std::string generate_type(const Il2CppType *type) {
     std::stringstream output;
     Il2CppClass *klass = il2cpp_class_from_type(type);
 
-    //int flags = il2cpp_class_get_flags(klass);
+    //int32_t flags = il2cpp_class_get_flags(klass);
     //bool is_enum = il2cpp_class_is_enum(klass);
     bool is_valuetype = il2cpp_class_is_valuetype(klass);
 
@@ -437,7 +437,7 @@ std::string generate_type(const Il2CppType *type) {
     //
     //if (!extends.empty()) {
     //    output << " : " << extends[0];
-    //    for (int i = 1; i < extends.size(); ++i) {
+    //    for (int32_t i = 1; i < extends.size(); ++i) {
     //        output << ", " << extends[i];
     //    }
     //}
@@ -456,7 +456,7 @@ std::string generate_type(const Il2CppType *type) {
 }
 
 void il2cpp_structs_generate() {
-    int il2cpp_version = get_il2cpp_version();
+    int32_t il2cpp_version = get_il2cpp_version();
     if (il2cpp_version == -1) {
         printf("Failed to detect metadata version!\n");
     }
@@ -477,13 +477,13 @@ void il2cpp_structs_generate() {
     if (il2cpp_image_get_class) {
         printf("Version greater than 2018.3\n");
         // using il2cpp_image_get_class
-        for (int i = 0; i < size; ++i) {
+        for (int32_t i = 0; i < size; ++i) {
             printf("Generating %i/%li ...\n", i + 1, size);
     
             const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
             std::stringstream image_str;
             size_t class_count = il2cpp_image_get_class_count(image);
-            for (int j = 0; j < class_count; ++j) {
+            for (int32_t j = 0; j < class_count; ++j) {
                 const Il2CppClass *klass = il2cpp_image_get_class(image, j);
                 const Il2CppType *type = il2cpp_class_get_type((Il2CppClass *)klass);
                 std::string output = image_str.str() + generate_type(type);
@@ -512,7 +512,7 @@ void il2cpp_structs_generate() {
             printf("miss Assembly::GetTypes\n");
             return;
         }
-        for (int i = 0; i < size; ++i) {
+        for (int32_t i = 0; i < size; ++i) {
             printf("Generating %i/%li ...\n", i + 1, size);
 
             const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
@@ -525,7 +525,7 @@ void il2cpp_structs_generate() {
             void *reflection_assembly = ((Assembly_Load_t)assembly_load->methodPointer)(nullptr, assembly_file_name, nullptr);
             Il2CppArray *reflection_types = ((Assembly_GetTypes_t)assembly_get_types->methodPointer)(reflection_assembly, nullptr);
             void **items = reflection_types->vector;
-            for (int j = 0; j < reflection_types->max_length; ++j) {
+            for (int32_t j = 0; j < reflection_types->max_length; ++j) {
                 Il2CppClass *klass = il2cpp_class_from_system_type((Il2CppReflectionType *)items[j]);
                 const Il2CppType *type = il2cpp_class_get_type(klass);
                 std::string output = image_str.str() + generate_type(type);
@@ -555,7 +555,7 @@ void il2cpp_structs_generate() {
     }
 
     size_t count = output_array.size();
-    for (int i = 0; i < count; ++i) {
+    for (int32_t i = 0; i < count; ++i) {
         out_stream << output_array[i];
     }
 

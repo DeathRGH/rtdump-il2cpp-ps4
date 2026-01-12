@@ -4,7 +4,7 @@ std::mutex dumper_lock;
 
 std::string get_method_modifier(uint32_t flags) {
     std::stringstream output;
-    unsigned int access = flags & METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK;
+    uint32_t access = flags & METHOD_ATTRIBUTE_MEMBER_ACCESS_MASK;
     
     switch (access) {
     case METHOD_ATTRIBUTE_PRIVATE:
@@ -55,7 +55,7 @@ std::string get_method_modifier(uint32_t flags) {
 }
 
 bool _il2cpp_type_is_byref(const Il2CppType *type) {
-    unsigned int byref = type->byref;
+    uint32_t byref = type->byref;
     if (il2cpp_type_is_byref) {
         byref = il2cpp_type_is_byref(type);
     }
@@ -220,8 +220,8 @@ std::string dump_method(Il2CppClass *klass) {
             outPut << " Slot: " << std::dec << method->slot;
         }*/
         output << "\n\t";
-        unsigned int iflags = 0;
-        unsigned int flags = il2cpp_method_get_flags(method, &iflags);
+        uint32_t iflags = 0;
+        uint32_t flags = il2cpp_method_get_flags(method, &iflags);
         output << get_method_modifier(flags);
         // TODO genericContainerIndex
         const Il2CppType *return_type = il2cpp_method_get_return_type(method);
@@ -230,10 +230,10 @@ std::string dump_method(Il2CppClass *klass) {
         }
         Il2CppClass *return_class = il2cpp_class_from_type(return_type);
         output << resolve_generic_type(return_class) << " " << il2cpp_method_get_name(method) << "(";
-        unsigned int param_count = il2cpp_method_get_param_count(method);
-        for (int i = 0; i < param_count; ++i) {
+        uint32_t param_count = il2cpp_method_get_param_count(method);
+        for (int32_t i = 0; i < param_count; ++i) {
             const Il2CppType *param = il2cpp_method_get_param(method, i);
-            unsigned int attrs = param->attrs;
+            uint32_t attrs = param->attrs;
             if (_il2cpp_type_is_byref(param)) {
                 if (attrs & PARAM_ATTRIBUTE_OUT && !(attrs & PARAM_ATTRIBUTE_IN)) {
                     output << "out ";
@@ -316,8 +316,8 @@ std::string dump_field(Il2CppClass *klass) {
     while (FieldInfo *field = il2cpp_class_get_fields(klass, &iter)) {
         // TODO attribute
         output << "\t";
-        int attrs = il2cpp_field_get_flags(field);
-        int access = attrs & FIELD_ATTRIBUTE_FIELD_ACCESS_MASK;
+        int32_t attrs = il2cpp_field_get_flags(field);
+        int32_t access = attrs & FIELD_ATTRIBUTE_FIELD_ACCESS_MASK;
         switch (access) {
         case FIELD_ATTRIBUTE_PRIVATE:
             output << "private ";
@@ -370,7 +370,7 @@ std::string dump_type(const Il2CppType *type) {
     Il2CppClass *klass = il2cpp_class_from_type(type);
     output << "\n// Namespace: " << il2cpp_class_get_namespace(klass) << "\n";
     
-    int flags = il2cpp_class_get_flags(klass);
+    int32_t flags = il2cpp_class_get_flags(klass);
     if (flags & TYPE_ATTRIBUTE_SERIALIZABLE) {
         output << "[Serializable]\n";
     }
@@ -378,7 +378,7 @@ std::string dump_type(const Il2CppType *type) {
     // TODO attribute
     bool is_valuetype = il2cpp_class_is_valuetype(klass);
     bool is_enum = il2cpp_class_is_enum(klass);
-    int visibility = flags & TYPE_ATTRIBUTE_VISIBILITY_MASK;
+    int32_t visibility = flags & TYPE_ATTRIBUTE_VISIBILITY_MASK;
 
     switch (visibility) {
     case TYPE_ATTRIBUTE_PUBLIC:
@@ -440,7 +440,7 @@ std::string dump_type(const Il2CppType *type) {
 
     if (!extends.empty()) {
         output << " : " << extends[0];
-        for (int i = 1; i < extends.size(); ++i) {
+        for (int32_t i = 1; i < extends.size(); ++i) {
             output << ", " << extends[i];
         }
     }
@@ -462,7 +462,7 @@ void il2cpp_dump() {
     printf("Dumping %li images...\n", size);
 
     std::stringstream image_output;
-    for (int i = 0; i < size; ++i) {
+    for (int32_t i = 0; i < size; ++i) {
         const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
         image_output << "// Image " << i << ": " << il2cpp_image_get_name(image) << "\n";
     }
@@ -471,14 +471,14 @@ void il2cpp_dump() {
     if (il2cpp_image_get_class) {
         printf("Version greater than 2018.3\n");
         // using il2cpp_image_get_class
-        for (int i = 0; i < size; ++i) {
+        for (int32_t i = 0; i < size; ++i) {
             printf("Dumping %i/%li ...\n", i + 1, size);
 
             const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
             std::stringstream image_str;
             image_str << "\n// Dll : " << il2cpp_image_get_name(image);
             size_t class_count = il2cpp_image_get_class_count(image);
-            for (int j = 0; j < class_count; ++j) {
+            for (int32_t j = 0; j < class_count; ++j) {
                 const Il2CppClass *klass = il2cpp_image_get_class(image, j);
                 const Il2CppType *type = il2cpp_class_get_type((Il2CppClass *)klass);
                 //printf("type name : %s\n", il2cpp_type_get_name(type));
@@ -508,7 +508,7 @@ void il2cpp_dump() {
             printf("miss Assembly::GetTypes\n");
             return;
         }
-        for (int i = 0; i < size; ++i) {
+        for (int32_t i = 0; i < size; ++i) {
             printf("Dumping %i/%li ...\n", i + 1, size);
 
             const Il2CppImage *image = il2cpp_assembly_get_image(assemblies[i]);
@@ -523,7 +523,7 @@ void il2cpp_dump() {
             void *reflection_assembly = ((Assembly_Load_t)assembly_load->methodPointer)(nullptr, assembly_file_name, nullptr);
             Il2CppArray *reflection_types = ((Assembly_GetTypes_t)assembly_get_types->methodPointer)(reflection_assembly, nullptr);
             void **items = reflection_types->vector;
-            for (int j = 0; j < reflection_types->max_length; ++j) {
+            for (int32_t j = 0; j < reflection_types->max_length; ++j) {
                 Il2CppClass *klass = il2cpp_class_from_system_type((Il2CppReflectionType *)items[j]);
                 const Il2CppType *type = il2cpp_class_get_type(klass);
                 //printf("type name : %s\n", il2cpp_type_get_name(type));
@@ -538,7 +538,7 @@ void il2cpp_dump() {
     out_stream << image_output.str();
 
     size_t count = output_array.size();
-    for (int i = 0; i < count; ++i) {
+    for (int32_t i = 0; i < count; ++i) {
         out_stream << output_array[i];
     }
 
