@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
-    <ProjectConfiguration Include="Debug|ORBIS">
-      <Configuration>Debug</Configuration>
+    <ProjectConfiguration Include="debug|ORBIS">
+      <Configuration>debug</Configuration>
       <Platform>ORBIS</Platform>
     </ProjectConfiguration>
   </ItemGroup>
@@ -11,7 +11,7 @@
     <ProjectName>rtdump-il2cpp-ps4</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'" Label="Configuration">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|ORBIS'" Label="Configuration">
     <ConfigurationType>DynamicLibrary</ConfigurationType>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -26,34 +26,32 @@
     <Import Condition="Exists('$(VCTargetsPath)\BuildCustomizations\OrbisWavePsslc.props')" Project="$(VCTargetsPath)\BuildCustomizations\OrbisWavePsslc.props" />
     <Import Condition="Exists('$(VCTargetsPath)\BuildCustomizations\SCU.props')" Project="$(VCTargetsPath)\BuildCustomizations\SCU.props" />
   </ImportGroup>
-  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='debug|ORBIS'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debug|ORBIS'">
     <OutDir>$(SolutionDir)build\$(Configuration)\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
   </PropertyGroup>
-  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='debug|ORBIS'">
     <ClCompile>
-      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions);</PreprocessorDefinitions>
+      <PreprocessorDefinitions>DEBUG_BUILD;%(PreprocessorDefinitions);</PreprocessorDefinitions>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <PrecompiledHeader>Use</PrecompiledHeader>
+      <CppLanguageStd>Cpp17</CppLanguageStd>
+      <OptimizationLevel>Levelz</OptimizationLevel>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <Addressing>NonAslr</Addressing>
       <AdditionalLibraryDirectories>$(ProjectDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>-lKernel_gen_stub_weak</AdditionalDependencies>
+      <AdditionalDependencies>-lkernel_gen_stub_weak</AdditionalDependencies>
     </Link>
     <PostBuildEvent>
       <Command>"$(PS4_DEP)\self\make_fself.exe"  "$(OutputPath)$(TargetName).prx"  "$(OutputPath)$(TargetName).sprx"
 
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo open 192.168.0.31 2121&gt; temp.txt )
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo cd "/data/"&gt;&gt; temp.txt )
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo send $(OutputPath)$(TargetName).sprx&gt;&gt; temp.txt )
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo quit&gt;&gt; temp.txt )
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( echo quit&gt;&gt; temp.txt )
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( ftp -A -s:temp.txt )
-if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( del temp.txt )</Command>
+curl --connect-timeout 1 -T $(OutputPath)$(TargetName).sprx ftp://192.168.0.31:2121/user/data/</Command>
     </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -63,7 +61,7 @@ if \"%COMPUTERNAME%\" == \"DESKTOP-VM514UQ\" ( del temp.txt )</Command>
     <ClCompile Include="prx.cpp" />
     <ClCompile Include="sig.cpp" />
     <ClCompile Include="stdafx.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|ORBIS'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='debug|ORBIS'">Create</PrecompiledHeader>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

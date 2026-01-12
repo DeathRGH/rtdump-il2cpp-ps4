@@ -7,11 +7,11 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "rtdump-il2cpp-ps4", "rtdump
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
-		Debug|ORBIS = Debug|ORBIS
+		debug|ORBIS = debug|ORBIS
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{89A56792-FA3F-4809-9022-1C8AA484F009}.Debug|ORBIS.ActiveCfg = Debug|ORBIS
-		{89A56792-FA3F-4809-9022-1C8AA484F009}.Debug|ORBIS.Build.0 = Debug|ORBIS
+		{89A56792-FA3F-4809-9022-1C8AA484F009}.debug|ORBIS.ActiveCfg = debug|ORBIS
+		{89A56792-FA3F-4809-9022-1C8AA484F009}.debug|ORBIS.Build.0 = debug|ORBIS
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
