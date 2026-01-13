@@ -27,7 +27,7 @@ G:
 ```
 # Building
 Build the solution with visual studio.<br>
-I left a post build event for automatic file transfers via FTP. Simply change the PC name or remove the checks if you want to use it for yourself.
+I left a Post-Build Event for automatic file transfers via FTP. Change the IP to the one of your PS4 and make sure you have curl installed.
 
 # Usage
 Once you have the prx built and fake signed to a sprx, you can use any sprx loader to inject into a Unity game.
