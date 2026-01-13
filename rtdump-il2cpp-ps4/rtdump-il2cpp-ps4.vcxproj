@@ -47,6 +47,8 @@
       <Addressing>NonAslr</Addressing>
       <AdditionalLibraryDirectories>$(ProjectDir)libs;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>-lkernel_gen_stub_weak</AdditionalDependencies>
+      <DataStripping>StripFuncsAndData</DataStripping>
+      <DuplicateStripping>true</DuplicateStripping>
     </Link>
     <PostBuildEvent>
       <Command>"$(PS4_DEP)\self\make_fself.exe"  "$(OutputPath)$(TargetName).prx"  "$(OutputPath)$(TargetName).sprx"
